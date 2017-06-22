@@ -1,0 +1,89 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="project-rommi-face-time">
+  <template>
+    <style>
+      :host {
+        display: inline-block;
+	font-family: 'Roboto';
+      }
+      .date {
+	      	color: #ffcc00;
+	      	font-size: 4em;
+
+      }
+      .time {
+	      	color: white;
+	      	font-size: 8em;
+      }
+    </style>
+    <div class="date">[[day]].[[month]].[[year]]</div>
+    <div class="time">[[hour]]:[[minute]]:[[second]]</div>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ProjectRommiFaceTime extends Polymer.Element {
+      	static get is() { return 'project-rommi-face-time'; }
+      	static get properties() {
+        	return {
+			dt: {
+            			type: String,
+            			value: Date()
+          		},
+          		year: {
+            			type: Number,
+            			value: 0
+          		},
+          		month: {
+            			type: Number,
+            			value: 0
+          		},
+          		day: {
+            			type: Number,
+            			value: 0
+          		},
+          		hour: {
+            			type: Number,
+            			value: 0
+          		},
+          		minute: {
+            			type: Number,
+            			value: 0
+          		},
+          		second: {
+            			type: Number,
+            			value: 0
+          		},
+        	};
+      	}
+	
+	ready(){
+		super.ready();
+		console.log('clock started')
+		setInterval(function(that){
+	              that.update_time();
+		}, 1000, this);
+	}
+	
+	update_time(){
+		var dt = new Date();
+		this.year = dt.getFullYear()
+		this.month = dt.getMonth() + 1
+		this.day = dt.getDate()
+		this.hour = dt.getHours()
+		this.minute = dt.getMinutes()
+		this.second = dt.getSeconds()
+      	}
+      	
+	constructor() {
+        	super();
+	}
+}
+
+	window.customElements.define(ProjectRommiFaceTime.is, ProjectRommiFaceTime);
+  	</script>
+</dom-module>

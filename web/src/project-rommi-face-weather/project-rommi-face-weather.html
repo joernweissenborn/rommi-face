@@ -1,0 +1,36 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+
+<dom-module id="project-rommi-face-weather">
+  <template>
+    <style>
+      :host {
+        display: block;
+      }
+    </style>
+    <h2>Hello [[prop1]]!</h2>
+  </template>
+
+  <script>
+    /**
+     * `project-rommi-face-weather`
+     * 
+     *
+     * @customElement
+     * @polymer
+     * @demo demo/index.html
+     */
+    class ProjectRommiFaceWeather extends Polymer.Element {
+      static get is() { return 'project-rommi-face-weather'; }
+      static get properties() {
+        return {
+          prop1: {
+            type: String,
+            value: 'project-rommi-face-weather'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(ProjectRommiFaceWeather.is, ProjectRommiFaceWeather);
+  </script>
+</dom-module>

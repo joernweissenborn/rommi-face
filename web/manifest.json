@@ -1,0 +1,7 @@
+{
+  "name": "project-rommi-face",
+  "short_name": "project-rommi-face",
+  "description": "Rommis Face",
+  "start_url": "/",
+  "display": "standalone"
+}

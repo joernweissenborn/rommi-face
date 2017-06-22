@@ -1,0 +1,39 @@
+<link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<link rel="import" href="../project-rommi-face-weather/project-rommi-face-weather.html">
+<link rel="import" href="../project-rommi-face-time/project-rommi-face-time.html">
+
+<dom-module id="project-rommi-face-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+	background-color: #0086b3;
+	height: 100vh;
+	margin: 0;
+      }
+    </style>
+    <h2>Hello, I am [[name]]!</h2>
+    	<project-rommi-face-time></project-rommi-face-time>
+    	<project-rommi-face-weather></project-rommi-weather>
+  </template>
+
+  <script>
+    /**
+     * @customElement
+     * @polymer
+     */
+    class ProjectRommiFaceApp extends Polymer.Element {
+      static get is() { return 'project-rommi-face-app'; }
+      static get properties() {
+        return {
+          name: {
+            type: String,
+            value: 'Rommi'
+          }
+        };
+      }
+    }
+
+    window.customElements.define(ProjectRommiFaceApp.is, ProjectRommiFaceApp);
+  </script>
+</dom-module>
