@@ -9,15 +9,19 @@
 	      width: 800;
 	      height:100;
       }
+      .tick {
+	      color: white;
+	      font-size:2em;
+      }
     </style>
     <h2>[[curTmp]] °C</h2>
-    <svg id="holder"></svg>
+    <div id="holder"></div>
   </template>
 
   <script>
     /**
      * `project-rommi-face-weather`
-     * 
+     *
      *
      * @customElement
      * @polymer
@@ -35,25 +39,33 @@
       	}
 	ready(){
 		super.ready();
-		this.svg = d3.select(this.shadowRoot.querySelector('#holder'));
+		this.svg = d3.select(this.shadowRoot.querySelector('#holder')).append('svg');
+		this.width = this.shadowRoot.querySelector('#holder').offsetWidth
 		this.updateGraph();
 	}
 	updateGraph(){
-		var hs = [34.9, 37.5, 31.9, 33.6, 37.4, 34.7, 33.7, 36.2],
-		    WIDTH = 600,
-    		    HEIGHT = 100,
+		var hs = [34.9, 
+			31.9, 
+			37.5, 
+			33.6, 
+			34.7, 
+			37.4, 
+			33.7, 
+			36.2],
+		    WIDTH = this.width,
+    		    HEIGHT = 300,
     		    MARGINS = {
         		top: 20,
         		right: 20,
         		bottom: 20,
-        		left: 20
+        		left: 40
     		    }
 
               this.svg.attr("width", WIDTH)
                   .attr("height", HEIGHT)
-		var x= d3.scaleLinear()
-			.range([MARGINS.left, WIDTH - MARGINS.right])
-		x.domain([0,8])
+		var x = d3.scaleLinear()
+			.range([MARGINS.left, (WIDTH - MARGINS.right) * 1 / 2, WIDTH - MARGINS.right])
+		x.domain([0,2,8])
 		var min = {date:0, temp:33.5}.temp,
 		    max = {date:0, temp:33.5}.temp
 		var data = [{date:0, temp:33.5}]
@@ -62,24 +74,61 @@
 			var t = hs[i]
 			if (t > max) {max = t;}
 			if (t < min) {min = t;}
-			data.push({date: parseInt(i+1), temp: t})
+			data.push({"date": parseInt(i)+1, "temp": t})
 		}
+		var datamin = [{date:0, temp:31.5}]
+		for (i in hs){
+			var t = parseInt(hs[i])-4
+			if (t > max) {max = t;}
+			if (t < min) {min = t;}
+			datamin.push({"date": parseInt(i)+1, "temp": t})
+		}
+		var datamax = [{date:0, temp:31.5}]
+		for (i in hs){
+			var t = parseInt(hs[i])+4
+			if (t > max) {max = t;}
+			if (t < min) {min = t;}
+			datamax.push({"date": parseInt(i)+1, "temp": t})
+		}
+		console.log(data)
+		console.log(datamin)
 		var y= d3.scaleLinear()
 			.range([HEIGHT - MARGINS.top, MARGINS.bottom])
-		y.domain([min-5,max+5])
+		y.domain([min-1,max+1])
 
 		// define the))  line
 		var valueline = d3.line()
+		    .curve(d3.curveBasis)
 		    .x(function(d) { return x(d.date); })
 		    .y(function(d) { return y(d.temp); });
 		// Add the valueline path.
 		this.svg.append("path")
 			      .attr("fill", "none")
-      .attr("stroke", "white")
-      .attr("stroke-linejoin", "round")
-      .attr("stroke-linecap", "round")
-      .attr("stroke-width", 1.5)
+		      .attr("stroke", "white")
+		      .attr("stroke-linejoin", "round")
+		      .attr("stroke-linecap", "round")
+		      .attr("stroke-width", 1.5)
 		      .datum(data)
+		      .attr("class", "line")
+		      .attr("d", valueline);
+		// Add the valueline path.
+		this.svg.append("path")
+			      .attr("fill", "none")
+		      .datum(datamax)
+		      .attr("stroke", "red")
+		      .attr("stroke-linejoin", "round")
+		      .attr("stroke-linecap", "round")
+		      .attr("stroke-width", 1.5)
+		      .attr("class", "line")
+		      .attr("d", valueline);
+		// Add the valueline path.
+		this.svg.append("path")
+			      .attr("fill", "none")
+		      .datum(datamin)
+		      .attr("stroke", "blue")
+		      .attr("stroke-linejoin", "round")
+		      .attr("stroke-linecap", "round")
+		      .attr("stroke-width", 1.5)
 		      .attr("class", "line")
 		      .attr("d", valueline);
 
@@ -90,8 +139,11 @@
 
 		  // Add the Y Axis
 		this.svg.append("g")
-		    .attr("transform", "translate(" + (MARGINS.left) + ",0)")
-		      .call(d3.axisLeft(y));
+		    	.attr("transform", "translate(" + (MARGINS.left) + ",0)")
+		      	.call(d3.axisLeft(y)
+			      .tickValues([min, min + (max-min)/2, max])
+		      	)
+			.select(".domain").remove();
 			    }
 		    }
 
