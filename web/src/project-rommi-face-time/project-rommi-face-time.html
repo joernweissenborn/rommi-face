@@ -4,22 +4,22 @@
   <template>
     <style>
       :host {
-        display: inline-block;
+        display: block;
 	font-family: 'Roboto';
       }
       .date {
 	      	color: #ffcc00;
-	      	font-size: 4em;
-		float:left; 
-		display:inline; 
+	      	font-size: 2em;
+		float:left;
+		display:inline;
 		width: 49%;
 
       }
       .time {
 	      	color: white;
-	      	font-size: 8em;
-		float:left; 
-		display:inline; 
+	      	font-size: 2em;
+		float:left;
+		display:inline;
 		width: 49%;
       }
     </style>
@@ -62,7 +62,7 @@
           		},
         	};
       	}
-	
+
 	ready(){
 		super.ready();
 		console.log('clock started')
@@ -70,7 +70,7 @@
 	              that.update_time();
 		}, 1000, this);
 	}
-	
+
 	update_time(){
 		var dt = new Date();
 		this.year = dt.getFullYear()
@@ -80,7 +80,7 @@
 		this.minute = ("0" + dt.getMinutes()).slice(-2)
 		this.second = ("0" + dt.getSeconds()).slice(-2)
       	}
-      	
+
 	constructor() {
         	super();
 	}
