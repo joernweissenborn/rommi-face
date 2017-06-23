@@ -1,4 +1,5 @@
 <link rel="import" href="../../bower_components/polymer/polymer-element.html">
+<script src="../../bower_components/d3/d3.js"></script>
 
 <dom-module id="project-rommi-face-weather">
   <template>
@@ -7,7 +8,8 @@
         display: block;
       }
     </style>
-    <h2>Hello [[prop1]]!</h2>
+    <h2>[[curTmp]] °C</h2>
+    <svg id="holder"></svg>
   </template>
 
   <script>
@@ -20,16 +22,77 @@
      * @demo demo/index.html
      */
     class ProjectRommiFaceWeather extends Polymer.Element {
-      static get is() { return 'project-rommi-face-weather'; }
-      static get properties() {
-        return {
-          prop1: {
-            type: String,
-            value: 'project-rommi-face-weather'
-          }
-        };
-      }
-    }
+      	static get is() { return 'project-rommi-face-weather'; }
+      	static get properties() {
+        	return {
+          		curTmp: {
+            			type: Number,
+            			value: 38.9
+          		}
+        	};
+      	}
+	ready(){
+		super.ready();
+		this.svg = d3.select(this.shadowRoot.querySelector('#holder'));
+		this.updateGraph();
+	}
+	updateGraph(){
+		var hs = [34.9, 37.5, 31.9, 33.6, 37.4, 34.7, 33.7, 36.2],
+		    WIDTH = 600,
+    		    HEIGHT = 100,
+    		    MARGINS = {
+        		top: 20,
+        		right: 20,
+        		bottom: 20,
+        		left: 20
+    		    }
+		var x= d3.scaleLinear()
+			.range([MARGINS.left, WIDTH - MARGINS.right])
+		x.domain([0,8])
+		var min = {date:0, temp:33.5}.temp,
+		    max = {date:0, temp:33.5}.temp
+		var data = [{date:0, temp:33.5}]
+		var i;
+		for (i in hs){
+			var t = hs[i]
+			if (t > max) {max = t;}
+			if (t < min) {min = t;}
+			data.push({date: parseInt(i+1), temp: t})
+		}
+		var y= d3.scaleLinear()
+			.range([HEIGHT - MARGINS.top, MARGINS.bottom])
+		y.domain([min-5,max+5])
+		console.log(min-5)
+		console.log(max+5)
+		console.log(hs)
+		console.log(data[0].date)
+
+		// define the))  line
+		var valueline = d3.line()
+		    .x(function(d) { return x(d.date); })
+		    .y(function(d) { return y(d.temp); });
+		// Add the valueline path.
+		this.svg.append("path")
+			      .attr("fill", "none")
+      .attr("stroke", "white")
+      .attr("stroke-linejoin", "round")
+      .attr("stroke-linecap", "round")
+      .attr("stroke-width", 1.5)
+		      .datum(data)
+		      .attr("class", "line")
+		      .attr("d", valueline);
+
+		  // Add the X Axis
+		this.svg.append("g")
+		      .attr("transform", "translate(0," + HEIGHT + ")")
+		      .call(d3.axisBottom(x));
+
+		  // Add the Y Axis
+		this.svg.append("g")
+		    .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+		      .call(d3.axisLeft(y));
+			    }
+		    }
 
     window.customElements.define(ProjectRommiFaceWeather.is, ProjectRommiFaceWeather);
   </script>

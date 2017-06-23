@@ -30,10 +30,6 @@
       	static get is() { return 'project-rommi-face-time'; }
       	static get properties() {
         	return {
-			dt: {
-            			type: String,
-            			value: Date()
-          		},
           		year: {
             			type: Number,
             			value: 0
@@ -47,16 +43,16 @@
             			value: 0
           		},
           		hour: {
-            			type: Number,
+            			type: String,
             			value: 0
           		},
           		minute: {
-            			type: Number,
+            			type: String,
             			value: 0
           		},
           		second: {
-            			type: Number,
-            			value: 0
+            			type: String,
+            			value: "00"
           		},
         	};
       	}
@@ -74,9 +70,9 @@
 		this.year = dt.getFullYear()
 		this.month = dt.getMonth() + 1
 		this.day = dt.getDate()
-		this.hour = dt.getHours()
-		this.minute = dt.getMinutes()
-		this.second = dt.getSeconds()
+		this.hour = ("0" + dt.getHours()).slice(-2)
+		this.minute = ("0" + dt.getMinutes()).slice(-2)
+		this.second = ("0" + dt.getSeconds()).slice(-2)
       	}
       	
 	constructor() {
