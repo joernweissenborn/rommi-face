@@ -6,6 +6,8 @@
     <style>
       :host {
         display: block;
+	      width: 800;
+	      height:100;
       }
     </style>
     <h2>[[curTmp]] °C</h2>
@@ -46,6 +48,9 @@
         		bottom: 20,
         		left: 20
     		    }
+
+              this.svg.attr("width", WIDTH)
+                  .attr("height", HEIGHT)
 		var x= d3.scaleLinear()
 			.range([MARGINS.left, WIDTH - MARGINS.right])
 		x.domain([0,8])
@@ -62,10 +67,6 @@
 		var y= d3.scaleLinear()
 			.range([HEIGHT - MARGINS.top, MARGINS.bottom])
 		y.domain([min-5,max+5])
-		console.log(min-5)
-		console.log(max+5)
-		console.log(hs)
-		console.log(data[0].date)
 
 		// define the))  line
 		var valueline = d3.line()
@@ -84,7 +85,7 @@
 
 		  // Add the X Axis
 		this.svg.append("g")
-		      .attr("transform", "translate(0," + HEIGHT + ")")
+		      .attr("transform", "translate(0," + (HEIGHT - MARGINS.top) + ")")
 		      .call(d3.axisBottom(x));
 
 		  // Add the Y Axis
